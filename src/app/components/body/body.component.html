@@ -1,0 +1,190 @@
+<main class="container my-5">
+  <section class="container_cards">
+    <div *ngFor="let user of users" class="card">
+      <img class="user_image" src="../../../assets/user.svg" alt="user icon" />
+      <div class="card-body">
+        <div class="mb-4 text-center">
+          <h5 class="card-title">{{ user.nombre_completo }}</h5>
+          <p class="card-text">{{ user.cedula }}</p>
+        </div>
+        <div class="d-flex gap-3 justify-content-evenly">
+          <button
+            data-bs-toggle="modal"
+            data-bs-target="#editUserModal"
+            class="btn btn-warning"
+            (click)="assignDataUserToModified(user)"
+          >
+            Editar
+          </button>
+          <button
+            data-bs-toggle="modal"
+            data-bs-target="#deleteUserModal"
+            (click)="saveId(user.id)"
+            class="btn btn-danger"
+          >
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<button
+  data-bs-toggle="modal"
+  data-bs-target="#createUserModal"
+  class="button_float btn btn-primary"
+>
+  +
+</button>
+
+<!-- Modal create user -->
+<div
+  class="modal fade"
+  id="createUserModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Crear usuario</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="resetUserForm(); resetErrorMessage()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="userForm" (ngSubmit)="createUser()">
+          <div class="mb-3">
+            <label class="form-label">Cedula</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="cedula"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nombre completo</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="nombre_completo"
+            />
+          </div>
+          <p class="text-danger">
+            {{errorText}}
+          </p>
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal edit user -->
+<div
+  class="modal fade"
+  id="editUserModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Actualizar usuario
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="resetUserForm(); resetId(); resetErrorMessage()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="userForm" (ngSubmit)="updateUser()">
+          <div class="mb-3">
+            <label class="form-label">Cedula</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="cedula"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nombre completo</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="nombre_completo"
+            />
+          </div>
+          <p class="text-danger">
+            {{errorText}}
+          </p>
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete modal -->
+<div
+  class="modal fade"
+  id="deleteUserModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Eliminar usuario</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="resetId()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>El usuario se eliminará permanentemente.</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          (click)="resetId()"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button type="button" (click)="deleteUser()" class="btn btn-primary">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="alert.show" class="alert alert-danger alert-dismissible alert_size" role="alert">
+  <strong>{{alert.message}}</strong>
+  <button
+    type="button"
+    class="btn-close"
+    (click)="closeAlert()"
+  ></button>
+</div>
